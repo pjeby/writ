@@ -12,12 +12,12 @@
     "marked": "~0.2.8"
   },
   "devDependencies": {},
-  "bin": "./writ",
+  "bin": {"writ": "./writ.js"},
   "preferGlobal": true,
   "scripts": {
     "test": "make test"
   },
-  "repository": "",
+  "repository": "https://github.com/satchmorun/writ",
   "keywords": [
     "literate",
     "markdown"
