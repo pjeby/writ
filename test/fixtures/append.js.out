@@ -1,0 +1,3 @@
+function one() { return 'one'; }
+function two() { return 'two'; }
+function three() { return 'three'; }

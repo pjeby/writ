@@ -1,0 +1,28 @@
+{
+  "name": "writ",
+  "version": "0.0.1",
+  "description": "Light-weight Markdown-based literate programming",
+  "main": "writ.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "commander": "~1.1.1",
+    "glob": "~3.1.21",
+    "marked": "~0.2.8"
+  },
+  "devDependencies": {},
+  "bin": "./writ",
+  "preferGlobal": true,
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": "",
+  "keywords": [
+    "literate",
+    "markdown"
+  ],
+  "author": "Arun Srinivasan",
+  "license": "MIT",
+  "readmeFilename": "README.md"
+}
