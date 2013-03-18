@@ -4,6 +4,9 @@ writ: clean
 test:
 	@node test/test.js
 
+publish:
+	@npm publish .
+
 clean:
 	@rm -f writ.js
 
