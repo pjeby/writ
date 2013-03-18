@@ -1,6 +1,6 @@
 {
   "name": "writ",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Light-weight Markdown-based literate programming",
   "main": "writ.js",
   "directories": {
@@ -12,7 +12,9 @@
     "marked": "~0.2.8"
   },
   "devDependencies": {},
-  "bin": {"writ": "./writ.js"},
+  "bin": {
+    "writ": "./writ.js"
+  },
   "preferGlobal": true,
   "scripts": {
     "test": "make test"
