@@ -1,4 +1,4 @@
-writ: clean
+writ:
 	@node writ.js writ.js.md
 
 test:
