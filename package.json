@@ -1,6 +1,6 @@
 {
   "name": "writ",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Light-weight Markdown-based literate programming",
   "main": "writ.js",
   "directories": {
