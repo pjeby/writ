@@ -59,9 +59,7 @@ The `compile` function is the entry point to the actual compilation work.
 
     function compile(src, lang) {
       var source = new Source(lang);
-      codeblocks(src).forEach(function(block) {
-        source.push(block);
-      });
+      marked.lexer(src).forEach(function(block) { source.push(block); });
       return source.assemble();
     }
 
@@ -79,7 +77,8 @@ The `Source` object is the compilation engine.
 
     function Source(lang) {
       this.compileRE(lang);
-      this.code = [];
+      this.ignore = false;
+      this.openSection = this.code = [];
       this.sections = {};
     }
 
@@ -100,6 +99,7 @@ The `compileRE` method does the work of building the regexen for `lang`.
 
       this.re = {
         section: new RegExp(this.re.section.replace(/com/g, comment)),
+        heading: /^(==|!!) *(.*?)(?: *\1)?$/,
         ref: new RegExp(this.re.ref.replace(/com/g, comment), 'mg'),
       };
     };
@@ -130,14 +130,45 @@ single-line comment symbols.
       if (percent.indexOf(lang) >= 0) return '%';
     }
 
-The `push` method accepts the incoming stream of blocks, putting them in the
-appropriate places (or ignoring them) depending on their comment directive.
+The `push` method accepts the incoming stream of blocks and dispatches them
+according to their type. Everything but H2s and code blocks are ignored.
 
     Source.prototype.push = function(block) {
-      var match = block.match(this.re.section);
+      var match;
+
+      switch(block.type) {
+        case 'heading': if (block.depth === 2) this.heading(block); break;
+        case 'code': this.codeblock(block); break;
+      }
+    };
+
+The `heading` method handles named sections by header.
+
+    Source.prototype.heading = function(block) {
+      var match = block.text.match(this.re.heading);
+      this.ignore = false;
 
       if (!match) {
-        this.code.push(block + '\n');
+        this.openSection = this.code;
+        return;
+      }
+
+      switch(match[1]) {
+        case '!!': this.ignore = true; break;
+        case '==': this.openSection = this.section(match[2]); break;
+      }
+    };
+
+The `codeblock` method collects code blocks, putting them in the appropriate places
+(or ignoring them) depending on their comment directive.
+
+    Source.prototype.codeblock = function(block) {
+      if (this.ignore) return;
+
+      var match = block.text.match(this.re.section);
+
+      if (!match) {
+        this.openSection.push(block.text);
         return;
       }
 
@@ -171,6 +202,7 @@ then die.
       }
 
       if (depth === 50) error('Recursion limit exceeded');
+      if (!/\n$/.test(code)) code += '\n';
       return code;
     };
 

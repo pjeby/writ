@@ -46,11 +46,13 @@ you don't need to know any syntax: **writ** will generate the target file by
 concatenating all the code blocks in the order they appear. This is exactly how
 [literate CoffeeScript][litcoffee] works.
 
-For slightly more involved cases, **writ** supports 3 bits of syntax:
+For slightly more involved cases, **writ** supports syntax for:
+
 
 1. `//!! .*[ !!//]` for ignoring a code block
 2. `//== name[ ==//]` for naming a code block
-3. `//:: name[ :://]` for including a code block
+3. `##== name[ ==##]` for naming a section
+4. `//:: name[ :://]` for including a code block
 
 The `//` bits are configurable and are defaulted to the single-line comment
 token for your language.
@@ -65,6 +67,8 @@ To keep a code block from being included in the generated output, start the
 code block with a line starting with:
 
     //!! This is an ignored code block
+
+    //!! Also ignored !!//
 
 
 ### Naming and Dereferencing Code Blocks
@@ -115,6 +119,43 @@ A few things to note about named sections:
 
 4. If you have multiple named sections with the same name, they'll get
    concatenated together in the order they appear in the source.
+
+### Naming H2 Sections
+
+I've found it useful to be able to be able to have entire chunks of a document
+be a named section, so you can also use the double-equals (`==`) syntax in an
+H2-level header to name all the sections "under" a specific heading.
+
+So this...
+
+    ```
+    //:: Utilities :://
+    ```
+
+    ##== Utilities
+
+    noop
+
+        function noop() {}
+
+    add
+
+        function add(x, y) { return x + y; }
+
+    mul
+
+        function mul(x, y) { return x * y; }
+
+Would compile to:
+
+    function noop() {}
+    function add(x, y) { return x + y; }
+    function mul(x, y) { return x * y; }
+
+And you don't have to explicitly name each code block in the section.
+
+Once any other H2 (named or not) is reached in the document, **writ** will
+return to processing as usual.
 
 
 Libraries Built With Writ

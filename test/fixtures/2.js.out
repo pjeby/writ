@@ -1,7 +1,6 @@
 function up() {
   goUp();
 }
-
 function down() {
   goDown();
 }
