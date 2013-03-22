@@ -150,7 +150,7 @@ function commentSymbol(lang) {
   if (percent.indexOf(lang) >= 0) return '%';
 }
 function indent(text, leading) {
-  return text.replace(/^.*$/mg, leading + '$&');
+  return text.replace(/^.*\S+.*$/mg, leading + '$&');
 }
 function error(msg) {
   console.error(msg);

@@ -277,7 +277,7 @@ Make sure utilities defined elsewhere get into the compiled file.
 Prefixes each line of `text` with `leading`.
 
     function indent(text, leading) {
-      return text.replace(/^.*$/mg, leading + '$&');
+      return text.replace(/^.*\S+.*$/mg, leading + '$&');
     }
 
 Print an error message and die.
