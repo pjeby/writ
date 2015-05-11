@@ -33,8 +33,7 @@ function test(md, out) {
   print('.');
 }
 
-exec('node writ.js "test/fixtures/*.md"', function() {
-  pairs(fixtures, test);
-  console.log();
-  cleanFixtures();
-});
+require('../writ.js').main(["", "", "test/fixtures/*.md"]);
+pairs(fixtures, test);
+console.log();
+cleanFixtures();
