@@ -10,9 +10,7 @@ CLI to compile your Markdown files to your target language of choice.
     #!/usr/bin/env node
 
     var fs = require('fs');
-    var cli = require('commander');
     var path = require('path');
-    var glob = require('glob').sync;
     var marked = require('marked');
 
 
@@ -230,42 +228,65 @@ respective Markdown progenitors.
 
 **Writ** uses [commander][commander] for options parsing.
 
-    cli.usage('[options] <glob ...>')
+    function main(argv) {
+
+      var cli = require ('commander');
+
+      cli.usage('[options] <glob ...>')
        .option('-d, --dir <path>', 'change output directory')
-       .parse(process.argv);
+       .parse(argv);
 
 We can't do anything if no files are specified, so just print the usage and
 exit.
 
-    if (!cli.args.length)
-      cli.help();
+      if (!cli.args.length)
+        cli.help();
 
 [node-glob][glob] helps us grab all the specified files. If none match the
 glob, print an error and exit.
 
 
-    var glob = require('glob').sync;
+      var glob = require('glob').sync;
 
-    var inputs = cli.args.reduce(function(out, fileglob) {
-      return out.concat(glob(fileglob));
-    }, []);
+      var inputs = cli.args.reduce(function(out, fileglob) {
+        return out.concat(glob(fileglob));
+      }, []);
 
-    if (!inputs.length)
-      error("Globs didn't match any source files");
+      if (!inputs.length)
+        error("Globs didn't match any source files");
 
 If an output directory was specified but doesn't exist, print an error and
 exit.
 
-    if (cli.dir && !fs.existsSync(cli.dir))
-      error('Directory does not exist: ' + JSON.stringify(cli.dir));
+      if (cli.dir && !fs.existsSync(cli.dir))
+        error('Directory does not exist: ' + JSON.stringify(cli.dir));
 
-    var outputDir = cli.dir;
+      var outputDir = cli.dir;
 
 Finally, process all the files
 
-    inputs.forEach(function(file) {
-      writ(file, outputDir);
-    });
+      inputs.forEach(function(file) {
+        writ(file, outputDir);
+      });
+
+      return;
+    }
+
+
+The API
+-------
+
+If run from the command line, we run `main()`; otherwise, export our functionality as an API.
+
+    if (require.main === module) {
+      main(process.argv);
+    } else module.exports = {
+      compile: compile,
+      writ: writ,
+      main: main,
+      Source: Source
+    }
+
 
 Utilities
 ---------
@@ -280,11 +301,10 @@ Prefixes each line of `text` with `leading`.
       return text.replace(/^.*\S+.*$/mg, leading + '$&');
     }
 
-Print an error message and die.
+Print an error message and die with an exception (so that it can be caught by tools using the API).
 
     function error(msg) {
-      console.error(msg);
-      process.exit(1);
+      throw new Error(msg);
     }
 
 
