@@ -301,10 +301,13 @@ Prefixes each line of `text` with `leading`.
       return text.replace(/^.*\S+.*$/mg, leading + '$&');
     }
 
-Print an error message and die with an exception (so that it can be caught by tools using the API).
+Print an error message and die.  (Or throw an exception if using the API).
 
     function error(msg) {
-      throw new Error(msg);
+      if (require.main === module) {
+        console.error(msg);
+        process.exit(1);
+      } else throw new Error(msg);
     }
 
 

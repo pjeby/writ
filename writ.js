@@ -166,5 +166,8 @@ function indent(text, leading) {
   return text.replace(/^.*\S+.*$/mg, leading + '$&');
 }
 function error(msg) {
-  throw new Error(msg);
+  if (require.main === module) {
+    console.error(msg);
+    process.exit(1);
+  } else throw new Error(msg);
 }
