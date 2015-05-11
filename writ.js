@@ -26,11 +26,6 @@ function compile(src, lang) {
   marked.lexer(src).forEach(function(block) { source.push(block); });
   return source.assemble();
 }
-function codeblocks(src) {
-  return marked.lexer(src)
-    .filter(function(block) { return block.type === 'code'; })
-    .map(function(block) { return block.text; });
-}
 function Source(lang) {
   this.compileRE(lang);
   this.ignore = false;

@@ -61,16 +61,6 @@ The `compile` function is the entry point to the actual compilation work.
       return source.assemble();
     }
 
-The `codeblocks` function takes advantage of the Markdown lexer that the
-[marked][marked] library exposes to return an Array of just the code blocks
-from the given `src`.
-
-    function codeblocks(src) {
-      return marked.lexer(src)
-        .filter(function(block) { return block.type === 'code'; })
-        .map(function(block) { return block.text; });
-    }
-
 The `Source` object is the compilation engine.
 
     function Source(lang) {
