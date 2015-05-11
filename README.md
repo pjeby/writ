@@ -37,6 +37,12 @@ destination directory:
 
     writ "src/*.md" --dir build
 
+There is also an API, which can be accessed via `require("writ")`, with the following exports:
+
+* `compile(sourceString, langExt)` -- takes a markdown string and returns the extracted code string
+* `writ(sourcePath, outputDir)` -- read the file at `sourcePath` and write the compiled version to `outputDir`.  The output filename is the source name minus `.md` or `.markdown`, and the language for compiling is taken from the second extension, if any.  (e.g. `foo.js.md` is assumed to be JavaScript.)
+* `main(argv)` -- the command-line tool, complete with argument parsing; be sure to include two dummy arguments at the front to simulate `process.argv`.
+* `Source` -- the class that's used to take parsed markdown and extract/assemble code blocks.  (See the source code in `writ.js.md` for more details.)
 
 Syntax
 ------
