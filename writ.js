@@ -1,9 +1,7 @@
 #!/usr/bin/env node
 
 var fs = require('fs');
-var cli = require('commander');
 var path = require('path');
-var glob = require('glob').sync;
 var marked = require('marked');
 function writ(file, outputDir) {
   var mdfile = read(file);
@@ -115,26 +113,41 @@ Source.prototype.resolveReferences = function(code) {
       : match;
   });
 }
-cli.usage('[options] <glob ...>')
+function main(argv) {
+
+  var cli = require ('commander');
+
+  cli.usage('[options] <glob ...>')
    .option('-d, --dir <path>', 'change output directory')
-   .parse(process.argv);
-if (!cli.args.length)
-  cli.help();
-var glob = require('glob').sync;
+   .parse(argv);
+  if (!cli.args.length)
+    cli.help();
+  var glob = require('glob').sync;
 
-var inputs = cli.args.reduce(function(out, fileglob) {
-  return out.concat(glob(fileglob));
-}, []);
+  var inputs = cli.args.reduce(function(out, fileglob) {
+    return out.concat(glob(fileglob));
+  }, []);
 
-if (!inputs.length)
-  error("Globs didn't match any source files");
-if (cli.dir && !fs.existsSync(cli.dir))
-  error('Directory does not exist: ' + JSON.stringify(cli.dir));
+  if (!inputs.length)
+    error("Globs didn't match any source files");
+  if (cli.dir && !fs.existsSync(cli.dir))
+    error('Directory does not exist: ' + JSON.stringify(cli.dir));
 
-var outputDir = cli.dir;
-inputs.forEach(function(file) {
-  writ(file, outputDir);
-});
+  var outputDir = cli.dir;
+  inputs.forEach(function(file) {
+    writ(file, outputDir);
+  });
+
+  return;
+}
+if (require.main === module) {
+  main(process.argv);
+} else module.exports = {
+  compile: compile,
+  writ: writ,
+  main: main,
+  Source: Source
+}
 function quoteRE(str) {
   return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 }
@@ -153,6 +166,5 @@ function indent(text, leading) {
   return text.replace(/^.*\S+.*$/mg, leading + '$&');
 }
 function error(msg) {
-  console.error(msg);
-  process.exit(1);
+  throw new Error(msg);
 }
