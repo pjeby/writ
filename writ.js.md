@@ -304,4 +304,4 @@ Print an error message and die.  (Or throw an exception if using the API).
 [marked]: https://github.com/chjj/marked
 [glob]: https://github.com/isaacs/node-glob
 [commander]: https://github.com/visionmedia/commander.js
-[escapere]: http://simonwillison.net/2006/Jan/20/escape/
+[escapere]: http://blog.simonwillison.net/post/57956816139/escape
